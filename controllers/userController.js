@@ -16,6 +16,29 @@ const auth = async (req, res) => {
   }
 };
 
+const addUser = async (req, res) => {
+    try {
+      const user = new User({
+        login: req.body != undefined ? req.body.login : req.query.login,
+        password: req.body != undefined ? req.body.password : req.query.password,
+        pesel: req.body != undefined ? req.body.pesel : req.query.pesel,
+        name: req.body != undefined ? req.body.name : req.query.name,
+        role: req.body != undefined ? req.body.role : req.query.role,
+      });
+      const allUsers = await User.find();
+      const allLogin = allUsers.map((u) => u.login);
+      if (!allLogin.includes(user.login)) {
+        await user.save();
+        res.status(201).send(user);
+      } else {
+        res.status(201).send([]);
+      }
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  };
+
 module.exports = {
     auth,
+    addUser,
   };
