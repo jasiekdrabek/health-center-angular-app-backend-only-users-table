@@ -38,7 +38,20 @@ const addUser = async (req, res) => {
     }
   };
 
+  const deleteUser = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const user = await User.findById(id);
+      await User.findByIdAndDelete(id).then((r) => {
+        res.status(201).send(user);
+      });
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  };
+
 module.exports = {
     auth,
     addUser,
+    deleteUser
   };
