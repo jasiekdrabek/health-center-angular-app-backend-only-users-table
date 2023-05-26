@@ -50,8 +50,21 @@ const addUser = async (req, res) => {
     }
   };
 
+  const getAllUsers = async (req, res) => {
+    try {
+      let user = await User.find();
+      if (req.query.role) {
+        user = user.filter((u) => u.role == req.query.role);
+      }
+      res.send(user);
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  };
+
 module.exports = {
     auth,
     addUser,
-    deleteUser
+    deleteUser,
+    getAllUsers,
   };
